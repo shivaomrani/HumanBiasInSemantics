@@ -1,3 +1,6 @@
+# code obtained from https://github.com/vered1986/PythonUtils/blob/master/word_embeddings/format_convertion/convert_text_embeddings_to_binary.py
+
+
 from __future__ import print_function
 
 import sys

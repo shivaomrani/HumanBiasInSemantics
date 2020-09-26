@@ -1,5 +1,6 @@
-# code obtained from https://github.com/vered1986/PythonUtils/blob/master/word_embeddings/format_convertion/convert_text_embeddings_to_binary.py
-
+""" code obtained from
+https://github.com/vered1986/PythonUtils/blob/master/word_embeddings/format_convertion/convert_text_embeddings_to_binary.py
+"""
 
 from __future__ import print_function
 
@@ -15,7 +16,7 @@ def main():
     print('Loading embeddings file from {}'.format(embedding_file))
     wv, words = load_embeddings(embedding_file)
 
-    out_emb_file, out_vocab_file = embedding_file.replace('.txt', ''), embedding_file.replace('.txt', '.vocab')
+    out_emb_file, out_vocab_file = "embedding.npy","embedding.vocab"
     print('Saving binary file to {}'.format(out_emb_file))
     np.save(out_emb_file, wv)
 

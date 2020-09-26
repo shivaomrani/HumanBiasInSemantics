@@ -14,19 +14,33 @@ def load_embeddings(embeddings_path):
 def flowers_insects_attitude():
 
     # flowers
-    flowers = ["aster", "clover", "hyacinth", "marigold", "poppy", "azalea", "crocus", "iris", "orchid", "rose", "bluebell", "daffodil", "lilac", "pansy", "tulip", "buttercup", "daisy","lily", "peony", "violet", "carnation", "gladiola", "magnolia", "petunia", "zinnia"]
+    # flowers = ["aster", "clover", "hyacinth", "marigold", "poppy", "azalea", "crocus", "iris", "orchid", "rose", "bluebell", "daffodil", "lilac", "pansy", "tulip", "buttercup", "daisy","lily", "peony", "violet", "carnation", "gladiola", "magnolia", "petunia", "zinnia"]
+    # target1 = flowers
+    #
+    # #insects
+    # insects = ["ant", "caterpillar", "flea", "locust", "spider", "bedbug", "centipede", "fly","maggot", "tarantula", "bee", "cockroach", "gnat", "mosquito", "termite", "beetle", "cricket", "hornet", "moth", "wasp", "blackfly", "dragonfly", "horsefly", "roach", "weevil"]
+    # target2 = insects
+    #
+    # # pleasant attributes
+    # pleasant1 = ["caress", "freedom", "health", "love", "peace", "cheer", "friend","heaven", "loyal", "pleasure", "diamond", "gentle", "honest", "lucky", "rainbow","diploma", "gift", "honor", "miracle", "sunrise", "family", "happy", "laughter","paradise", "vacation"]
+    # attribute1 = pleasant1
+    #
+    # # unpleasant attributes
+    # unpleasant1 = ["abuse" , "crash" , "filth" , "murder" , "sickness" , "accident" , "death" , "grief" , "poison" , "stink" , "assault" , "disaster" , "hatred" , "pollute" , "tragedy" , "divorce" , "jail" , "poverty" , "ugly" , "cancer" , "kill" , "rotten" , "vomit" , "agony" , "prison"]
+    # attribute2 = unpleasant1
+    flowers = ["woman", "mother"]
     target1 = flowers
 
     #insects
-    insects = ["ant", "caterpillar", "flea", "locust", "spider", "bedbug", "centipede", "fly","maggot", "tarantula", "bee", "cockroach", "gnat", "mosquito", "termite", "beetle", "cricket", "hornet", "moth", "wasp", "blackfly", "dragonfly", "horsefly", "roach", "weevil"]
+    insects = ["man", "father"]
     target2 = insects
 
     # pleasant attributes
-    pleasant1 = ["caress", "freedom", "health", "love", "peace", "cheer", "friend","heaven", "loyal", "pleasure", "diamond", "gentle", "honest", "lucky", "rainbow","diploma", "gift", "honor", "miracle", "sunrise", "family", "happy", "laughter","paradise", "vacation"]
+    pleasant1 = ["health", "happy"]
     attribute1 = pleasant1
 
     # unpleasant attributes
-    unpleasant1 = ["abuse" , "crash" , "filth" , "murder" , "sickness" , "accident" , "death" , "grief" , "poison" , "stink" , "assault" , "disaster" , "hatred" , "pollute" , "tragedy" , "divorce" , "jail" , "poverty" , "ugly" , "cancer" , "kill" , "rotten" , "vomit" , "agony" , "prison"]
+    unpleasant1 = ["pollute", "tragedy"]
     attribute2 = unpleasant1
 
     return target1,target2,attribute1,attribute2

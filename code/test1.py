@@ -4,6 +4,9 @@ from utils import operations
 from sklearn.metrics.pairwise import cosine_similarity
 import statistics as stat
 import pandas as pd
+from scipy.stats import norm
+import random as random
+
 
 def load_embeddings(embeddings_path):
     with codecs.open(embeddings_path + '.vocab', 'r', 'utf-8') as f_in:
@@ -75,6 +78,48 @@ def calculateWomenNamePercentage(namesFile, name):
     percentage = (stat[0][2]*stat[0][3])/((stat[0][2]*stat[0][3])+ (stat[0][2]*stat[0][4]))
     return percentage
 
+def calculateCumulativeProbability(nullDistribution, testStatistic, distribution):
+    cumulative = -100
+    nullDistribution.sort()
+
+    if distribution == 'empirical':
+        ecdf = ECDF(nullDistribution)
+        cumulative = ecdf(testStatistic)
+    elif distribution == 'normal':
+        d = norm(loc = stat.mean(nullDistribution), scale = stat.stdev(nullDistribution))
+        cumulative = d.cdf(testStatistic)
+
+    return cumulative
+
+def computeNullHypothesis(wordIndex, nullMatrix, iterations, stereotype1, stereotype2):
+
+    print("Number of permutations ", iterations)
+
+    #Assuming both stereotypes have the same length
+    setSize = int(len(bothStereotypes)/2)
+
+    toShuffle = list(range(0, len(bothStereotypes)))
+    distribution = []
+
+    for iter in range(iterations):
+        random.shuffle(toShuffle)
+        #calculate mean for each null shuffle
+        meanSimilarityGroup1 = 0
+        meanSimilarityGroup2 = 0
+
+        for i in range(setSize):
+            meanSimilarityGroup1 = meanSimilarityGroup1 + nullMatrix[wordIndex][toShuffle[i]]
+
+        for i in range(setSize):
+            meanSimilarityGroup2 = meanSimilarityGroup2 + nullMatrix[wordIndex][toShuffle[i+setSize]]
+
+        meanSimilarityGroup1 = meanSimilarityGroup1/(setSize)
+        meanSimilarityGroup2 = meanSimilarityGroup2/(setSize)
+
+        distribution.append(meanSimilarityGroup1 - meanSimilarityGroup2)
+
+    return distribution
+
 
 data = load_embeddings("embedding")
 vectors = data[0]
@@ -82,15 +127,18 @@ index2word = data[1]
 word2index = data[2]
 
 namesFile = "../data/censusNames1990.csv"
-namesToTest = "../data/wow.txt"
+namesToTest = "../data/wow1.txt"
 caseSensitive = True
 checkWordPresence = True
 getCentroid = True
 wordDimension = 300
 
 names = load_names(namesToTest)
-attributesFirstSet = ["sister", "female", "woman", "girl", "daughter", "she", "hers", "her"]
-attributesSecondSet = ["brother", "male", "man", "boy", "son", "he", "his", "him"]
+print(names)
+# attributesFirstSet = ["sister", "female", "woman", "girl", "daughter", "she", "hers", "her"]
+# attributesSecondSet = ["brother", "male", "man", "boy", "son", "he", "his", "him"]
+attributesFirstSet = ["caress", "freedom", "health", "love", "peace", "cheer", "friend","heaven", "loyal", "pleasure", "diamond", "gentle", "honest", "lucky", "rainbow","diploma", "gift", "honor", "miracle", "sunrise", "family", "happy", "laughter","paradise", "vacation"]
+attributesSecondSet = ["abuse" , "crash" , "filth" , "murder" , "sickness" , "accident" , "death" , "grief" , "poison" , "stink" , "assault" , "disaster" , "hatred" , "pollute" , "tragedy" , "divorce" , "jail" , "poverty" , "ugly" , "cancer" , "kill" , "rotten" , "vomit" , "agony" , "prison"]
 
 if getCentroid == True:
     centroid = computeCentroid(names, vectors, word2index,wordDimension)
@@ -120,16 +168,23 @@ for i in range(len(names)):
 
 concept1NullMatrix = computeNullMatrix(names, bothStereotypes, vectors, word2index)
 
+distribution = "normal"
+
 for i in range(len(names)):
 
-    percentage = calculateWomenNamePercentage(namesFile, names[i])
-    nullDistributionConcept1 = []
+    # percentage = calculateWomenNamePercentage(namesFile, names[i])
+    percentage = 0
 
+    nullDistributionConcept1 = []
     for j in range(len(bothStereotypes)):
         nullDistributionConcept1.append(concept1NullMatrix[i][j])
-
 
     concept1Embedding = vectors[word2index[names[i]]]
     frequency = word2index[names[i]]+1
     print(names[i] , ", " , percentage , ", " ,effectSize(nullDistributionConcept1, meanConcept1Stereotype1[i] - meanConcept1Stereotype2[i]) ,
       ", " , cosineSimilarity(concept1Embedding, centroid) , ", " , frequency)
+
+    #new stuff
+    myMatrix = computeNullHypothesis(i, concept1NullMatrix, 1000000, attributesFirstSet, attributesSecondSet)
+    cumulativeVal = calculateCumulativeProbability(myMatrix, (meanConcept1Stereotype2[i] - meanConcept1Stereotype1[i]), distribution)
+    print("p val is ", 1- cumulativeVal)
